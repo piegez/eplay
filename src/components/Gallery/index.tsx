@@ -1,0 +1,118 @@
+import { useState } from 'react'
+import Section from '../Section'
+import { GalleryItem } from '../../pages/Home'
+import { Item, Itens, Action, Modal, ModalContent } from './styles'
+import imagelink from '../../assets/images/zelda.png'
+import imagehp from '../../assets/images/imagehp.png'
+import play from '../../assets/images/botao_play_1.png'
+import zoom from '../../assets/images/mais_zoom_1.png'
+import fechar from '../../assets/images/close.png'
+
+const mock: GalleryItem[] = [
+  {
+    type: 'image',
+    url: imagelink
+  },
+  {
+    type: 'image',
+    url: imagehp
+  },
+  {
+    type: 'video',
+    url: 'https://www.youtube.com/embed/uHGShqcAHlQ?si=0XsKdXwxKDWMtiua'
+  }
+]
+
+type Props = {
+  defaultCover: string
+  name: string
+  items: GalleryItem[]
+}
+
+interface ModalState extends GalleryItem {
+  isVisible: boolean
+}
+
+const Gallery = ({ defaultCover, name, items }: Props) => {
+  const [modal, setModal] = useState<ModalState>({
+    isVisible: false,
+    type: 'image',
+    url: ''
+  })
+  const getMediaCover = (item: GalleryItem) => {
+    if (item.type === 'image') return item.url
+    return defaultCover
+  }
+
+  const getMediaIcon = (item: GalleryItem) => {
+    if (item.type === 'image') return zoom
+    return play
+  }
+
+  const closeModal = () => {
+    setModal({
+      isVisible: false,
+      type: 'image',
+      url: ''
+    })
+  }
+
+  return (
+    <>
+      <Section title="Galeria" background="black">
+        <Itens>
+          {items.map((media, index) => (
+            <Item
+              key={media.url}
+              onClick={() => {
+                setModal({
+                  isVisible: true,
+                  type: media.type,
+                  url: media.url
+                })
+              }}
+            >
+              <img
+                src={getMediaCover(media)}
+                alt={`Media ${index + 1} de ${mock.length}`}
+              />
+              <Action>
+                <img
+                  src={getMediaIcon(media)}
+                  alt="Clique para maximizar a mídia"
+                />
+              </Action>
+            </Item>
+          ))}
+        </Itens>
+      </Section>
+      <Modal className={modal.isVisible ? 'visible' : ''}>
+        <ModalContent className="container">
+          <header>
+            <h4>{name}</h4>
+            <img
+              src={fechar}
+              alt="Ícone de fechar"
+              onClick={() => {
+                closeModal()
+              }}
+            />
+          </header>
+          {modal.type === 'image' ? (
+            <img src={modal.url} alt="Monstro" />
+          ) : (
+            <iframe frameBorder={0} src={modal.url} />
+          )}
+        </ModalContent>
+        <div
+          onClick={() => {
+            closeModal()
+          }}
+          className="overlay"
+        ></div>
+      </Modal>
+    </>
+  )
+}
+
+export default Gallery
