@@ -1,8 +1,10 @@
 import styled from 'styled-components'
-import { cores } from '../../styles'
+import { colors } from '../../styles'
 
 export const Itens = styled.ul`
   display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
 `
 
 export const Action = styled.div`
@@ -19,11 +21,11 @@ export const Action = styled.div`
   transition: opacity 0.5s ease;
 `
 export const Item = styled.li`
-  margin-right: 16px;
   position: relative;
+  cursor: zoom-in;
 
   > img {
-    border: 2px solid ${cores.branca};
+    border: 2px solid ${colors.white};
     border-radius: 8px;
     width: 150px;
     height: 150px;
@@ -75,6 +77,11 @@ export const ModalContent = styled.div`
     h4 {
       font-size: 18px;
       font-weight: bold;
+    }
+    img {
+      height: 16px;
+      width: 16px;
+      cursor: pointer;
     }
   }
   > img {

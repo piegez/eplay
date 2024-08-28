@@ -1,51 +1,61 @@
-import { useEffect, useState } from 'react'
 import ProductsList from '../../components/ProductsList'
-import resident from '../../assets/images/resident.png'
-import diablo from '../../assets/images/diablo.png'
-import zelda from '../../assets/images/zelda.png'
-import starWars from '../../assets/images/star_wars.png'
-import { Game } from '../Home'
+
+import {
+  useGetActionGamesQuery,
+  useGetFightGamesQuery,
+  useGetSportsGamesQuery,
+  useGetSimulationGamesQuery,
+  useGetRpgGamesQuery
+} from '../../services/api'
 
 const Categories = () => {
-  const [gamesAcao, setGameAcao] = useState<Game[]>([])
-  const [gamesEsportes, setGameEsportes] = useState<Game[]>([])
-  const [gamesSimulacao, setGameSimulacao] = useState<Game[]>([])
-  const [gamesLuta, setGameLuta] = useState<Game[]>([])
-  const [gamesRpg, setGameRpg] = useState<Game[]>([])
-
-  useEffect(() => {
-    fetch('https://fake-api-tau.vercel.app/api/eplay/acao')
-      .then((res) => res.json())
-      .then((res) => setGameAcao(res))
-
-    fetch('https://fake-api-tau.vercel.app/api/eplay/esportes')
-      .then((res) => res.json())
-      .then((res) => setGameEsportes(res))
-
-    fetch('https://fake-api-tau.vercel.app/api/eplay/simulacao')
-      .then((res) => res.json())
-      .then((res) => setGameSimulacao(res))
-
-    fetch('https://fake-api-tau.vercel.app/api/eplay/luta')
-      .then((res) => res.json())
-      .then((res) => setGameLuta(res))
-
-    fetch('https://fake-api-tau.vercel.app/api/eplay/rpg')
-      .then((res) => res.json())
-      .then((res) => setGameRpg(res))
-  }, [])
+  const { data: actionGames, isLoading: isLoadingAction } =
+    useGetActionGamesQuery()
+  const { data: fightGames, isLoading: isLoadingFight } =
+    useGetFightGamesQuery()
+  const { data: sportsGames, isLoading: isLoadingSports } =
+    useGetSportsGamesQuery()
+  const { data: simulationGames, isLoading: isLoadingSimulation } =
+    useGetSimulationGamesQuery()
+  const { data: rpgGames, isLoading: isLoadingRpg } = useGetRpgGamesQuery()
 
   return (
     <>
-      <ProductsList games={gamesAcao} title="Ação" background="black" />
-      <ProductsList games={gamesEsportes} title="Esportes" background="gray" />
       <ProductsList
-        games={gamesSimulacao}
+        games={actionGames}
+        title="Ação"
+        background="black"
+        id="action"
+        isLoading={isLoadingAction}
+      />
+      <ProductsList
+        games={sportsGames}
+        title="Esportes"
+        background="gray"
+        id="sports"
+        isLoading={isLoadingSports}
+      />
+      <ProductsList
+        games={simulationGames}
         title="Simulação"
         background="black"
+        id="simulation"
+        isLoading={isLoadingSimulation}
       />
-      <ProductsList games={gamesLuta} title="Luta" background="gray" />
-      <ProductsList games={gamesRpg} title="RPG" background="black" />
+      <ProductsList
+        games={fightGames}
+        title="Luta"
+        background="gray"
+        id="fight"
+        isLoading={isLoadingFight}
+      />
+      <ProductsList
+        games={rpgGames}
+        title="RPG"
+        background="black"
+        id="rpg"
+        isLoading={isLoadingRpg}
+      />
     </>
   )
 }
